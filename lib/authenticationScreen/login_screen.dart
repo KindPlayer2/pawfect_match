@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
+import 'package:pawfect_match/authenticationScreen/registration_screen.dart';
 import 'package:pawfect_match/widgets/custom_text_field_widget.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -141,7 +143,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   InkWell(
                     onTap: ()
                     {
-
+                      Get.to(RegistraionScreen());
                     },
                     child: const Text(
                       "Create here",
@@ -152,7 +154,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   )
-
                 ],
               ),
               const SizedBox( 
@@ -163,6 +164,11 @@ class _LoginScreenState extends State<LoginScreen> {
               showProgressBar == true ? CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(Colors.pink),
               ) : Container(),
+
+              const SizedBox( 
+                height: 15,
+              ),
+              
             ],
           ),
         ),
