@@ -18,7 +18,7 @@ class CustomTextFieldWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+      padding: const EdgeInsets.fromLTRB(30, 10, 30, 5),
       child: TextField(
         controller: editingController,
         decoration: InputDecoration(
