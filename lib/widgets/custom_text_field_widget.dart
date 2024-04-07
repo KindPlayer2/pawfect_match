@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CustomTextFieldWidget extends StatelessWidget {
   final TextEditingController? editingController;
@@ -6,6 +7,7 @@ class CustomTextFieldWidget extends StatelessWidget {
   final String? assetRef;
   final String? lableText;
   final bool? isObscure;
+  final TextInputType keyboardType;
 
   CustomTextFieldWidget(
       {super.key,
@@ -13,7 +15,8 @@ class CustomTextFieldWidget extends StatelessWidget {
       this.iconData,
       this.assetRef,
       this.lableText,
-      this.isObscure});
+      this.isObscure,
+      this.keyboardType = TextInputType.text});
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +24,14 @@ class CustomTextFieldWidget extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(30, 10, 30, 5),
       child: TextField(
         controller: editingController,
+        keyboardType: keyboardType,
+        inputFormatters: (keyboardType == TextInputType.number)
+            ? <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly]
+            : (keyboardType == TextInputType.numberWithOptions(decimal: true))
+                ? <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
+                  ]
+                : <TextInputFormatter>[],
         decoration: InputDecoration(
           labelText: lableText,
           prefixIcon: iconData != null
