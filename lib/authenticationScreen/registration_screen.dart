@@ -87,7 +87,18 @@ class _RegistraionScreenState extends State<RegistraionScreen> {
           child: Center(
             child: Column(
               children: [
-                const SizedBox(height: 100),
+                const SizedBox(height: 20),
+                Row(
+                  children: [
+                    const SizedBox(width: 20),
+                    Image.asset(
+                      "images/logo.png",
+                      width: 40,
+                      height: 40,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
                 const Text(
                   "Create your account",
                   style: TextStyle(
@@ -98,7 +109,7 @@ class _RegistraionScreenState extends State<RegistraionScreen> {
                 ),
                 const SizedBox(height: 16),
                 const Text(
-                  "Start your journey here",
+                  "Tell us a bit about yourself",
                   style: TextStyle(
                     fontSize: 18,
                     color: Color.fromARGB(255, 255, 255, 255),
@@ -167,6 +178,7 @@ class _RegistraionScreenState extends State<RegistraionScreen> {
                   lableText: "Email",
                   iconData: Icons.email_outlined,
                   isObscure: false,
+                  keyboardType: TextInputType.emailAddress,
                 ),
                 const SizedBox(height: 15),
                 // Password
@@ -201,6 +213,7 @@ class _RegistraionScreenState extends State<RegistraionScreen> {
                   iconData: Icons.flag,
                   isObscure: false,
                 ),
+                //Gender
                 const SizedBox(height: 15),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(30, 10, 30, 5),
@@ -229,7 +242,7 @@ class _RegistraionScreenState extends State<RegistraionScreen> {
                       lookingForInaPartnerTextEditingController.text =
                           newValue!;
                     },
-                    items: <String>['Male', 'Female', 'Prefer not to say']
+                    items: <String>['Male', 'Female', 'Open to Any']
                         .map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
@@ -308,25 +321,81 @@ class _RegistraionScreenState extends State<RegistraionScreen> {
                   "Lifestyle: ",
                   style: TextStyle(
                     fontSize: 18,
-                    color: Colors.grey,
+                    color: Color.fromARGB(255, 255, 255, 255),
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 const SizedBox(height: 16),
                 // Drink
-                CustomTextFieldWidget(
-                  editingController: drinkTextEditingController,
-                  lableText: "Do you drink?",
-                  iconData: Icons.water_drop,
-                  isObscure: false,
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(30, 10, 30, 5),
+                  child: DropdownButtonFormField<String>(
+                    decoration: InputDecoration(
+                      labelText: "Do you drink?",
+                      prefixIcon: Icon(Icons.water_drop),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(24),
+                        borderSide: const BorderSide(
+                          color: Color.fromARGB(255, 255, 255, 255),
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(24),
+                        borderSide: const BorderSide(
+                          color: Color.fromARGB(255, 255, 255, 255),
+                        ),
+                      ),
+                    ),
+                    value: drinkTextEditingController.text.isEmpty
+                        ? null
+                        : drinkTextEditingController.text,
+                    onChanged: (String? newValue) {
+                      drinkTextEditingController.text = newValue!;
+                    },
+                    items: <String>['Yes', 'No', 'Occasionally']
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ),
                 ),
                 const SizedBox(height: 15),
                 // Smoke
-                CustomTextFieldWidget(
-                  editingController: smokeTextEditingController,
-                  lableText: "Do you smoke?",
-                  iconData: Icons.smoking_rooms_rounded,
-                  isObscure: false,
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(30, 10, 30, 5),
+                  child: DropdownButtonFormField<String>(
+                    decoration: InputDecoration(
+                      labelText: "Do you smoke?",
+                      prefixIcon: Icon(Icons.smoking_rooms_rounded),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(24),
+                        borderSide: const BorderSide(
+                          color: Color.fromARGB(255, 255, 255, 255),
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(24),
+                        borderSide: const BorderSide(
+                          color: Color.fromARGB(255, 255, 255, 255),
+                        ),
+                      ),
+                    ),
+                    value: smokeTextEditingController.text.isEmpty
+                        ? null
+                        : smokeTextEditingController.text,
+                    onChanged: (String? newValue) {
+                      smokeTextEditingController.text = newValue!;
+                    },
+                    items: <String>['Yes', 'No', 'Occasionally']
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ),
                 ),
                 const SizedBox(height: 15),
                 // Has children
@@ -351,6 +420,9 @@ class _RegistraionScreenState extends State<RegistraionScreen> {
                   lableText: "Income",
                   iconData: Icons.euro,
                   isObscure: false,
+                  keyboardType: TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
                 ),
                 const SizedBox(height: 15),
                 // Living situation

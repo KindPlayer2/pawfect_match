@@ -67,7 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 40),
               // Display the login prompt
               const Text(
-                "Login now to find your Fur-ever mate",
+                "Login now and find your Fur-ever mate",
                 style: TextStyle(
                   fontSize: 18,
                   color: Color.fromARGB(255, 255, 255, 255),
