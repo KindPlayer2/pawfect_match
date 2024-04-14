@@ -159,7 +159,7 @@ class _RegistraionScreenState extends State<RegistraionScreen> {
                 //name
                 CustomTextFieldWidget(
                   //name
-                  editingController: emailTextEditingController,
+                  editingController: nameTextEditingController,
                   lableText: "Name",
                   iconData: Icons.abc,
                   isObscure: false,
@@ -172,10 +172,10 @@ class _RegistraionScreenState extends State<RegistraionScreen> {
                 //age
                 CustomTextFieldWidget(
                   //age
-                  editingController: passwordTextEditingController,
+                  editingController: ageTextEditingController,
                   lableText: "Age",
                   iconData: Icons.numbers,
-                  isObscure: true,
+                  isObscure: false,
                 ),
 
                 const SizedBox( 
@@ -514,8 +514,103 @@ class _RegistraionScreenState extends State<RegistraionScreen> {
                     ),
                   ),
                   child: InkWell(
-                    onTap: () {
-                      // Define the action to be taken when the login button is tapped
+                    onTap: () async
+                    {
+
+                      if(authenticationController.imageFile != null)
+                      {
+
+                        if (
+
+                          nameTextEditingController.text.trim().isNotEmpty 
+                           && passwordTextEditingController.text.trim().isNotEmpty
+                           && emailTextEditingController.text.trim().isNotEmpty 
+                           && ageTextEditingController.text.trim().isNotEmpty 
+                           && passwordTextEditingController.text.trim().isNotEmpty
+                           && phoneTextEditingController.text.trim().isNotEmpty 
+                           && cityTextEditingController.text.trim().isNotEmpty
+                           && countryTextEditingController.text.trim().isNotEmpty 
+                           && lookingForInaPartnerTextEditingController.text.trim().isNotEmpty
+                           && heightTextEditingController.text.trim().isNotEmpty 
+                           && weightTextEditingController.text.trim().isNotEmpty
+                           && genderTextEditingController.text.trim().isNotEmpty 
+                           && drinkTextEditingController.text.trim().isNotEmpty
+                           && smokeTextEditingController.text.trim().isNotEmpty 
+                           && passwordTextEditingController.text.trim().isNotEmpty
+                           && hasChildrenTextEditingController.text.trim().isNotEmpty 
+                           && professionTextEditingController.text.trim().isNotEmpty
+                           && incomeTextEditingController.text.trim().isNotEmpty
+                           && livingSituationTextEditingController.text.trim().isNotEmpty 
+                           && favouriteBreedTextEditingController.text.trim().isNotEmpty
+                           && sizeOfDogTextEditingController.text.trim().isNotEmpty
+                           && nationalityTextEditingController.text.trim().isNotEmpty 
+                           && languageSpokenTextEditingController.text.trim().isNotEmpty
+                           && educationTextEditingController.text.trim().isNotEmpty
+                           && religionextEditingController.text.trim().isNotEmpty
+
+                        )
+                        {
+
+                          setState(() {
+
+                            showProgressBar = true;
+                            
+                          });
+
+                          
+
+                          await authenticationController.createNewUserAccount(
+
+                              authenticationController.profileImage!,
+                              nameTextEditingController.text.trim(),
+                              ageTextEditingController.text.trim(),
+                              emailTextEditingController.text.trim(),
+                              passwordTextEditingController.text.trim(),
+                              phoneTextEditingController.text.trim(),
+                              cityTextEditingController.text.trim(),
+                              countryTextEditingController.text.trim(),
+                              lookingForInaPartnerTextEditingController.text.trim(),
+                              heightTextEditingController.text.trim(),
+                              weightTextEditingController.text.trim(),
+                              genderTextEditingController.text.trim(),
+                              drinkTextEditingController.text.trim(),
+                              smokeTextEditingController.text.trim(),
+                              professionTextEditingController.text.trim(),
+                              hasChildrenTextEditingController.text.trim(),
+                              incomeTextEditingController.text.trim(),
+                              hasChildrenTextEditingController.text.trim(),
+                              livingSituationTextEditingController.text.trim(),
+                              favouriteBreedTextEditingController.text.trim(),
+                              sizeOfDogTextEditingController.text.trim(),
+                              nationalityTextEditingController.text.trim(),
+                              languageSpokenTextEditingController.text.trim(),
+                              educationTextEditingController.text.trim(),
+                              religionextEditingController.text.trim(),
+                              
+                              );
+
+                              setState(() {
+                                showProgressBar = false;
+                              });
+
+                        }
+
+                        else
+                        {
+
+                          Get.snackbar("Field is empty", "Please fill out all fields");
+
+                        }
+
+                      }
+
+                      else
+                      {
+                        Get.snackbar("Image File Missing", "Please pick an image");
+
+                      }
+                      
+
                     },
                     child: const Center(
                       child: Text(
