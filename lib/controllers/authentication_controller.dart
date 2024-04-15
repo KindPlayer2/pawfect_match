@@ -5,11 +5,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:pawfect_match/authenticationScreen/login_screen.dart';
 import 'package:pawfect_match/homeScreen/home_screen.dart';
 import 'package:pawfect_match/models/person.dart' as personModel;
 
 class AuthenticationController extends GetxController {
   static AuthenticationController authController = Get.find();
+
+  late Rx<User?> firebaseCurrentUser;
 
   late Rx<File?> pickedFile;
   File? get profileImage => pickedFile.value;
@@ -110,5 +113,42 @@ class AuthenticationController extends GetxController {
     } catch (errorMsg) {
       Get.snackbar("Account Creation Failed", "Error Occured: $errorMsg");
     }
+  }
+
+  loginUser(String emailUser, String passwordUser) async
+  {
+    try
+    {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(email: emailUser, password: passwordUser);
+
+      Get.snackbar("Loggin in Successful", "You have logged in successfully");
+    }
+    catch(errorMsg)
+    {
+      Get.snackbar("Login unsuccessful", "Error occurred: $errorMsg");
+    }
+  }
+
+  checkIfUserIsLoggedIn(User? currentUser)
+  {
+    if(currentUser == null)
+    {
+      Get.to(LoginScreen());
+    }
+    else
+    {
+      Get.to(HomeScreen());
+    }
+  }
+
+  @override
+  void onReady(){
+    //TODO: implement onReady
+    super.onReady();
+
+    firebaseCurrentUser = Rx<User?>(FirebaseAuth.instance.currentUser);
+    firebaseCurrentUser.bindStream(FirebaseAuth.instance.authStateChanges());
+
+    ever(firebaseCurrentUser, checkIfUserIsLoggedIn);
   }
 }

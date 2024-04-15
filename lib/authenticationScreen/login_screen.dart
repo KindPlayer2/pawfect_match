@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pawfect_match/authenticationScreen/registration_screen.dart';
+import 'package:pawfect_match/controllers/authentication_controller.dart';
 import 'package:pawfect_match/widgets/custom_text_field_widget.dart';
 
 // Define a StatefulWidget for the login screen
@@ -20,6 +21,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   // Define a boolean to control the visibility of a progress bar
   bool showProgressBar = false;
+
+  var controllerAuth = AuthenticationController.authController;
 
   @override
   Widget build(BuildContext context) {
@@ -104,8 +107,22 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 child: InkWell(
-                  onTap: () {
-                    // Define the action to be taken when the login button is tapped
+                  onTap: () async
+                  {
+                    if(emailTextEditingController.text.trim().isNotEmpty && passwordTextEditingController.text.trim().isNotEmpty)
+                    {
+                      setState(() {
+                        showProgressBar = true;
+                      });
+                      await controllerAuth.loginUser(emailTextEditingController.text.trim(), passwordTextEditingController.text.trim());
+                      setState(() {
+                        showProgressBar = false;
+                      });
+                    }
+                    else
+                    {
+                      Get.snackbar("Email or password is missing", "Please fill all fields");
+                    }
                   },
                   child: const Center(
                     child: Text(

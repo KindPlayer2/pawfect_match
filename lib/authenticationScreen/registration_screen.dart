@@ -591,6 +591,7 @@ class _RegistraionScreenState extends State<RegistraionScreen> {
 
                               setState(() {
                                 showProgressBar = false;
+                                authenticationController.imageFile = null;
                               });
 
                         }
