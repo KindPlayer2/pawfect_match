@@ -1,14 +1,120 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_slider/carousel.dart';
 
 class UserDetailScreen extends StatefulWidget {
-  const UserDetailScreen({super.key});
+  String? userID;
+
+  UserDetailScreen({super.key, this.userID,});
 
   @override
   State<UserDetailScreen> createState() => _UserDetailScreenState();
 }
 
 class _UserDetailScreenState extends State<UserDetailScreen> {
+
+  //personal info
+  String name = ' ';
+  String age = ' ';
+  String phone = ' ';
+  String city = ' ';
+  String country = ' ';
+  String profileHeading = ' ';
+  String lookingForInaPartner = ' ';
+
+  //Appearance
+  String height = ' ';
+  String weight = ' ';
+  String gender = ' ';
+
+  //Life style
+  String drink = ' ';
+  String smoke = ' ';
+  String hasChildren = ' ';
+  String profession = ' ';
+  String income = ' ';
+  String livingSituation = ' ';
+  String hasDog = ' ';
+  String favouriteBreed = ' ';
+  String sizeOfDog = ' ';
+
+  //bckground
+  String nationality = ' ';
+  String languageSpoken = ' ';
+  String education = ' ';
+  String religion = ' ';
+
+  //slider images
+  String urlImage1 = "images/avatar.png";
+  String urlImage2 = "images/avatar.png";
+  String urlImage3 = "images/avatar.png";
+  String urlImage4 = "images/avatar.png";
+  String urlImage5 = "images/avatar.png";
+
+  retrieveUserInfo() async
+  {
+    await FirebaseFirestore.instance.collection("users").doc(widget.userID).get().then((snapshot)
+    {
+      if(snapshot.exists)
+      {
+        if(snapshot.data()!["urlImage1"] != null)
+        {
+          setState(() {
+            urlImage1 = snapshot.data()!["urlImage1"];
+            urlImage2 = snapshot.data()!["urlImage2"];
+            urlImage3 = snapshot.data()!["urlImage3"];
+            urlImage4 = snapshot.data()!["urlImage4"];
+            urlImage5 = snapshot.data()!["urlImage5"];
+          });
+        }
+
+          setState(() {
+            //personal info
+             name = snapshot.data()!["name"];
+             age = snapshot.data()!["age"];
+             phone = snapshot.data()!["phone"];
+             city = snapshot.data()!["city"];
+             country = snapshot.data()!["country"];
+             profileHeading = snapshot.data()!["profileHeading"];
+             lookingForInaPartner = snapshot.data()!["lookingForInaPartner"];
+
+            //Appearance
+             height = snapshot.data()!["height"];
+             weight = snapshot.data()!["weight"];
+             gender = snapshot.data()!["gender"];
+
+            //Life style
+             drink = snapshot.data()!["drink"];
+             smoke = snapshot.data()!["smoke"];
+             hasChildren = snapshot.data()!["hasChildren"];
+             profession = snapshot.data()!["profession"];
+             income = snapshot.data()!["income"];
+             livingSituation = snapshot.data()!["livingSituation"];
+             hasDog = snapshot.data()!["hasDog"];
+             favouriteBreed = snapshot.data()!["favouriteBreed"];
+             sizeOfDog = snapshot.data()!["sizeOfDog"];
+
+            //bckground
+             nationality = snapshot.data()!["nationality"];
+             languageSpoken = snapshot.data()!["languageSpoken"];
+             education = snapshot.data()!["education"];
+             religion = snapshot.data()!["religion"];
+          });
+
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    //TODO: implement initState
+    super.initState();
+
+    retrieveUserInfo();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,15 +140,103 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
           )
         ],
       ),
-      body: Center(
-        child: Text(
-          "User details screen",
-          style: TextStyle(
-            color: Colors.green,
-            fontSize: 20,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(30),
+          child: Column(
+            children: [
+              //image slider
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.4,
+                width: MediaQuery.of(context).size.width,
+                child: Padding(
+                  padding: const EdgeInsets.all(2),
+                  child: Carousel(
+                    indicatorBarColor: Colors.black.withOpacity(0.3),
+                    autoScrollDuration: const Duration(seconds: 2),
+                    animationPageDuration: const Duration(milliseconds: 500),
+                    activateIndicatorColor: Colors.black,
+                    animationPageCurve: Curves.easeIn,
+                    indicatorBarHeight: 30,
+                    indicatorHeight: 10,
+                    indicatorWidth: 10,
+                    unActivatedIndicatorColor: Colors.grey,
+                    stopAtEnd: false,
+                    autoScroll: true,
+                    items: [
+                      Image.network(urlImage1, fit: BoxFit.cover,),
+                      Image.network(urlImage2, fit: BoxFit.cover,),
+                      Image.network(urlImage3, fit: BoxFit.cover,),
+                      Image.network(urlImage4, fit: BoxFit.cover,),
+                      Image.network(urlImage5, fit: BoxFit.cover,),
+                    ]
+                  ),
+                )
+              ),
+
+              const SizedBox(height: 10.0,),
+
+              //personal info title
+              const SizedBox(height: 30.0,),
+              const Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  "Personal Info",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+
+                  )
+                ),
+
+              ),
+              const Divider(
+                color: Colors.white,
+                thickness: 2,
+              ),
+              //personal info table data
+              Container(
+                color: Colors.black,
+                padding: const EdgeInsets.all(20.0),
+                child: Table(
+                  children: [
+
+                    TableRow(
+                      children: [
+                        const Text(
+                          "name: ",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                          ),
+                        ),
+
+                        Text(
+                          name,
+                          style: const TextStyle(
+                            color: Colors.grey,
+                            fontSize: 18,
+                          ),
+                        )
+                      ],
+
+                      
+                    ),
+                    //EXTRA ROW
+                    const TableRow(
+                      children: [
+                        Text(""),
+                        Text(""),
+                      ]
+                    )
+                  ],
+                ),
+              )
+            ],
           ),
-         ),
         ),
-    );;
+      ),
+    );
   }
 }

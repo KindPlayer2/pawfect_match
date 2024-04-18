@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pawfect_match/tabScreens/favourite_sent_favourite_received_screen.dart';
 import 'package:pawfect_match/tabScreens/like_sent_like_received_screen.dart';
@@ -22,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen>
     ViewSentViewRecievedScreen(),
     FavouriteSentFavououriteReceivedScreen(),
     LiekSentLikeReceivedScreen(),
-    UserDetailScreen(),
+    UserDetailScreen(userID: FirebaseAuth.instance.currentUser!.uid,),
   ];
 
   @override

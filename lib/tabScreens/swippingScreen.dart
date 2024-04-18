@@ -60,6 +60,8 @@ class _SwippingScreenState extends State<SwippingScreen>
                     ),
                   ),
 
+                  const Spacer(),
+
                   //user data
                   GestureDetector(
                     onTap: ()
@@ -96,6 +98,49 @@ class _SwippingScreenState extends State<SwippingScreen>
                         
                       ],
                     ),
+                  ),
+                  const SizedBox(
+                    height: 14,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      //favourite button
+                      GestureDetector(
+                        onTap: ()
+                        {
+
+                        },
+                        child: Image.asset(
+                          "images/star.png",
+                          width: 60,
+                        ),
+                      ),
+
+                      //like button
+                      GestureDetector(
+                        onTap: ()
+                        {
+
+                        },
+                        child: Image.asset(
+                          "images/Buttonliked.png",
+                          width: 190,
+                        ),
+                      ),
+                      
+                      //like button
+                      GestureDetector(
+                        onTap: ()
+                        {
+
+                        },
+                        child: Image.asset(
+                          "images/Chat.png",
+                          width: 60,
+                        ),
+                      )
+                    ],
                   )
 
                 ],
