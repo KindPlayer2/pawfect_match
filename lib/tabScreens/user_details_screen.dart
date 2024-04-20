@@ -21,8 +21,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
   String phone = ' ';
   String city = ' ';
   String country = ' ';
-  String profileHeading = ' ';
-  String lookingForInaPartner = ' ';
+  String genderPrefernce = ' ';
 
   //Appearance
   String height = ' ';
@@ -32,26 +31,26 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
   //Life style
   String drink = ' ';
   String smoke = ' ';
-  String hasChildren = ' ';
+  String children = ' ';
   String profession = ' ';
   String income = ' ';
-  String livingSituation = ' ';
+  String living = ' ';
   String hasDog = ' ';
   String favouriteBreed = ' ';
-  String sizeOfDog = ' ';
+  String size = ' ';
 
   //bckground
   String nationality = ' ';
-  String languageSpoken = ' ';
+  String language = ' ';
   String education = ' ';
   String religion = ' ';
 
   //slider images
-  String urlImage1 = "images/avatar.png";
-  String urlImage2 = "images/avatar.png";
-  String urlImage3 = "images/avatar.png";
-  String urlImage4 = "images/avatar.png";
-  String urlImage5 = "images/avatar.png";
+  String urlImage1 = "https://firebasestorage.googleapis.com/v0/b/pawfect-match-7748f.appspot.com/o/Place%20Holder%2Favatar.png?alt=media&token=3a23c3b1-d549-477b-ac5d-ac8ee89e1829";
+  String urlImage2 = "https://firebasestorage.googleapis.com/v0/b/pawfect-match-7748f.appspot.com/o/Place%20Holder%2Favatar.png?alt=media&token=3a23c3b1-d549-477b-ac5d-ac8ee89e1829";
+  String urlImage3 = "https://firebasestorage.googleapis.com/v0/b/pawfect-match-7748f.appspot.com/o/Place%20Holder%2Favatar.png?alt=media&token=3a23c3b1-d549-477b-ac5d-ac8ee89e1829";
+  String urlImage4 = "https://firebasestorage.googleapis.com/v0/b/pawfect-match-7748f.appspot.com/o/Place%20Holder%2Favatar.png?alt=media&token=3a23c3b1-d549-477b-ac5d-ac8ee89e1829";
+  String urlImage5 = "https://firebasestorage.googleapis.com/v0/b/pawfect-match-7748f.appspot.com/o/Place%20Holder%2Favatar.png?alt=media&token=3a23c3b1-d549-477b-ac5d-ac8ee89e1829";
 
   retrieveUserInfo() async
   {
@@ -77,8 +76,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
              phone = snapshot.data()!["phone"];
              city = snapshot.data()!["city"];
              country = snapshot.data()!["country"];
-             profileHeading = snapshot.data()!["profileHeading"];
-             lookingForInaPartner = snapshot.data()!["lookingForInaPartner"];
+             genderPrefernce = snapshot.data()!["genderPrefernce"];
 
             //Appearance
              height = snapshot.data()!["height"];
@@ -88,17 +86,17 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
             //Life style
              drink = snapshot.data()!["drink"];
              smoke = snapshot.data()!["smoke"];
-             hasChildren = snapshot.data()!["hasChildren"];
+             children = snapshot.data()!["children"];
              profession = snapshot.data()!["profession"];
              income = snapshot.data()!["income"];
-             livingSituation = snapshot.data()!["livingSituation"];
+             living = snapshot.data()!["living"];
              hasDog = snapshot.data()!["hasDog"];
              favouriteBreed = snapshot.data()!["favouriteBreed"];
-             sizeOfDog = snapshot.data()!["sizeOfDog"];
+             size = snapshot.data()!["size"];
 
             //bckground
              nationality = snapshot.data()!["nationality"];
-             languageSpoken = snapshot.data()!["languageSpoken"];
+             language = snapshot.data()!["language"];
              education = snapshot.data()!["education"];
              religion = snapshot.data()!["religion"];
           });

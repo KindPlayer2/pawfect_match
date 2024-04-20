@@ -76,6 +76,7 @@ class AuthenticationController extends GetxController {
       String urlOfDownloadedImage = await uploadImageToStorage(imageProfile);
 
       personModel.Person personInstance = personModel.Person(
+        uid: FirebaseAuth.instance.currentUser!.uid,
         imageProfile: urlOfDownloadedImage,
         name: name,
         age: int.parse(age),
