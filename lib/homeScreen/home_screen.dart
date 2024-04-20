@@ -20,9 +20,9 @@ class _HomeScreenState extends State<HomeScreen>
   List tabScreensList = 
   [
     SwippingScreen(),
-    ViewSentViewRecievedScreen(),
+    ViewSentViewReceivedScreen(),
     FavouriteSentFavououriteReceivedScreen(),
-    LiekSentLikeReceivedScreen(),
+    LikeSentLikeReceivedScreen(),
     UserDetailScreen(userID: FirebaseAuth.instance.currentUser!.uid,),
   ];
 

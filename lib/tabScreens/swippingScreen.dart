@@ -1,6 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pawfect_match/controllers/profile_controller.dart';
+import 'package:pawfect_match/global.dart';
+import 'package:pawfect_match/tabScreens/user_details_screen.dart';
 
 class SwippingScreen extends StatefulWidget {
   const SwippingScreen({super.key});
@@ -13,6 +17,25 @@ class _SwippingScreenState extends State<SwippingScreen>
 {
 
   ProfileController profileController = Get.put(ProfileController());
+
+  String SenderName = ' ';
+
+  readCurrentUserData() async
+  {
+    await FirebaseFirestore.instance.collection("users").doc(currentUserID).get().then((dataSnapshot){
+      setState(() {
+        SenderName = dataSnapshot.data()!["name"].toString();
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    readCurrentUserData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +89,12 @@ class _SwippingScreenState extends State<SwippingScreen>
                   GestureDetector(
                     onTap: ()
                     {
+                      profileController.ViewSentViewReceived(
+                        eachProfileInfo.uid.toString(),
+                        SenderName,
+                      );
 
+                      Get.to(UserDetailScreen(userID: eachProfileInfo.uid,));
                     },
                     child: Column(
                       children: [
@@ -109,7 +137,10 @@ class _SwippingScreenState extends State<SwippingScreen>
                       GestureDetector(
                         onTap: ()
                         {
-
+                          profileController.FavouriteSentFavououriteReceived(
+                            eachProfileInfo.uid.toString(),
+                            SenderName,
+                          );
                         },
                         child: Image.asset(
                           "images/star.png",
@@ -121,7 +152,10 @@ class _SwippingScreenState extends State<SwippingScreen>
                       GestureDetector(
                         onTap: ()
                         {
-
+                          profileController.LikeSentLikeReceived(
+                            eachProfileInfo.uid.toString(),
+                            SenderName,
+                          );
                         },
                         child: Image.asset(
                           "images/Buttonliked.png",
