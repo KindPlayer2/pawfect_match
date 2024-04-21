@@ -1,19 +1,31 @@
-import "dart:io";
+import 'dart:io';
 
-import "package:flutter/material.dart";
-import "package:get/get.dart";
-import "package:pawfect_match/authenticationScreen/login_screen.dart";
-import "package:pawfect_match/controllers/authentication_controller.dart";
-import "package:pawfect_match/widgets/custom_text_field_widget.dart";
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:pawfect_match/controllers/authentication_controller.dart';
+import 'package:pawfect_match/global.dart';
+import 'package:pawfect_match/homeScreen/home_screen.dart';
+import 'package:pawfect_match/widgets/custom_text_field_widget.dart';
 
-class RegistraionScreen extends StatefulWidget {
-  const RegistraionScreen({super.key});
+class AccountSettingsScreen extends StatefulWidget {
+  const AccountSettingsScreen({super.key});
 
   @override
-  State<RegistraionScreen> createState() => _RegistraionScreenState();
+  State<AccountSettingsScreen> createState() => _AccountSettingsScreenState();
 }
 
-class _RegistraionScreenState extends State<RegistraionScreen> {
+class _AccountSettingsScreenState extends State<AccountSettingsScreen> 
+{
+
+  bool uploading = false, next = false;
+  final List<File> _image = [];
+  List <String> urlsList = [];
+  double val = 0;
 
   //personal info
   TextEditingController emailTextEditingController = TextEditingController();
@@ -48,111 +60,278 @@ class _RegistraionScreenState extends State<RegistraionScreen> {
   TextEditingController educationTextEditingController = TextEditingController();
   TextEditingController religionextEditingController = TextEditingController();
 
-  bool showProgressBar = false;
+  //personal info
+  String name = ' ';
+  String age = ' ';
+  String phone = ' ';
+  String city = ' ';
+  String country = ' ';
+  String genderPrefernce = ' ';
 
-  var authenticationController = AuthenticationController.authController;
+  //Appearance
+  String height = ' ';
+  String weight = ' ';
+  String gender = ' ';
+
+  //Life style
+  String drink = ' ';
+  String smoke = ' ';
+  String children = ' ';
+  String profession = ' ';
+  String income = ' ';
+  String living = ' ';
+  String hasDog = ' ';
+  String breed = ' ';
+  String size = ' ';
+
+  //bckground
+  String nationality = ' ';
+  String language = ' ';
+  String education = ' ';
+  String religion = ' ';
+
+  chooseImage() async
+  {
+    XFile ? PickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      _image.add(File(PickedFile!.path));
+    });
+  }
+
+  uploadImages() async
+  {
+    int i = 1;
+
+    for(var img in _image)
+    {
+      setState(() {
+        val = i / _image.length;
+      });
+
+      var refImages = FirebaseStorage.instance.ref().child("images/${DateTime.now().millisecondsSinceEpoch.toString()}.jpg");
+
+      await refImages.putFile(img).whenComplete(() async
+      {
+        await refImages.getDownloadURL().then((urlImage)
+        {
+          urlsList.add(urlImage);
+
+          i++;
+        });
+      });
+    }
+  }
+
+  retrieveUserData() async
+  {
+    await FirebaseFirestore.instance.collection("users").doc(currentUserID).get().then((snapshot){
+      if(snapshot.exists)
+      {
+        setState(() {
+          //personal info
+             name = snapshot.data()!["name"];
+             nameTextEditingController.text = name;
+             age = snapshot.data()!["age"].toString();
+             ageTextEditingController.text = age;
+             phone = snapshot.data()!["phone"];
+             phoneTextEditingController.text = phone;
+             city = snapshot.data()!["city"];
+             cityTextEditingController.text = city;
+             country = snapshot.data()!["country"];
+             countryTextEditingController.text = country;
+             genderPrefernce = snapshot.data()!["genderPrefernce"];
+             genderTextEditingController.text = genderPrefernce;
+
+            //Appearance
+             height = snapshot.data()!["height"];
+             heightTextEditingController.text = height;
+             weight = snapshot.data()!["weight"];
+             weightTextEditingController.text = weight;
+             gender = snapshot.data()!["gender"];
+             genderTextEditingController.text = gender;
+
+            //Life style
+             drink = snapshot.data()!["drink"];
+             drinkTextEditingController.text = drink;
+             smoke = snapshot.data()!["smoke"];
+             smokeTextEditingController.text = smoke;
+             children = snapshot.data()!["children"];
+             hasChildrenTextEditingController.text = children;
+             profession = snapshot.data()!["profession"];
+             professionTextEditingController.text = profession;
+             income = snapshot.data()!["income"];
+             incomeTextEditingController.text = income;
+             living = snapshot.data()!["living"];
+             livingSituationTextEditingController.text = living;
+             breed = snapshot.data()!["breed"];
+             favouriteBreedTextEditingController.text = breed;
+             size = snapshot.data()!["size"];
+             sizeOfDogTextEditingController.text = size;
+
+            //bckground
+             nationality = snapshot.data()!["nationality"];
+             nationalityTextEditingController.text = nationality;
+             language = snapshot.data()!["language"];
+             languageSpokenTextEditingController.text = language;
+             education = snapshot.data()!["education"];
+             educationTextEditingController.text = education;
+             religion = snapshot.data()!["religion"];
+             religionextEditingController.text = religion;
+        });
+      }
+    });
+  }
+
+
+  updateUserDataToFirestoreDatabase(
+    String name,
+    String age,
+    String phone,
+    String city,
+    String country,
+    String genderPreference,
+    String height,
+    String weight,
+    String gender,
+    String drink,
+    String smoke,
+    String children,
+    String profession,
+    String income,
+    String living,
+    String breed,
+    String size,
+    String nationality,
+    String language,
+    String education,
+    String religion,
+  )
+  async {
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return const AlertDialog(
+          content: SizedBox(
+            height: 200,
+            child: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  CircularProgressIndicator(),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text("Uploading images please wait ...")
+                ],
+              ),
+            ),
+          )
+        );  
+      },
+    );
+
+    await uploadImages();
+
+    await FirebaseFirestore.instance.collection("users").doc(currentUserID).update({
+      'name' : name,
+      'age' : int.parse(age),
+      'phone' : phone,
+      'city' : city,
+      'country' : country,
+      'genderPrefernce' : genderPrefernce,
+
+      'height' : height,
+      'weight' : weight,
+      'gender' : gender,
+
+      'drink' : drink,
+      'smoke' : smoke,
+      'children' : children,
+      'profession' : profession,
+      'income' : income,
+      'living' : living,
+      'breed' : living,
+      'size' : size,
+
+      'nationality' : nationality,
+      'language' : language,
+      'education' : education,
+      'religion' : religion,
+
+      'urlImage1' : urlsList[0].toString(),
+      'urlImage2' : urlsList[1].toString(),
+      'urlImage3' : urlsList[2].toString(),
+      'urlImage4' : urlsList[3].toString(),
+      'urlImage5' : urlsList[4].toString(),
+
+
+    });
+
+    Get.snackbar("Updated details", "your account has been updated successfully");
+
+    Get.to(HomeScreen());
+
+    
+
+    setState(() {
+      uploading = false;
+      _image.clear();
+      urlsList.clear();
+    });
+
+  }
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    retrieveUserData();
+  }
+
+
+  @override
+  Widget build(BuildContext context) 
+  {
     return Scaffold(
-       body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Colors.red, // Start color
-              Colors.pink, // Middle color
-              Colors.purple, // End color
-            ],
-            stops: [
-              0.1,
-              0.5,
-              1.2,
-            ], // Adjust these stops for the distribution of colors
+      appBar: AppBar(
+        title: Text(
+          next ? "Profile Information" : "Choose 5 Images",
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 22,
           ),
         ),
-        child: SingleChildScrollView(
-          child: Center(
-            child: Column(
-              children: [
+        actions: [
+          next ? Container() : IconButton(
+            onPressed: ()
+            {
+              if(_image.length == 5)
+              {
+                setState(() {
+                  uploading = true;
+                  next = true;
+                });
+              }
+              else
+              {
+                Get.snackbar("5 images", "please choose five images");
+              }
+            },
+            icon: Icon(Icons.navigate_next_outlined, size: 36,),
+          ),
+        ],
+      ),
+      body: next ? SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(30),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
 
-                const SizedBox(
-                  height: 100
-                ),
-
-                const Text(
-                  "Create account", 
-                  style: TextStyle(
-                    fontSize: 22,
-                    color: Colors.grey,
-                    fontWeight: FontWeight.bold
-                  ),
-                ),
-
-                const SizedBox(
-                  height: 16
-                ),
-
-                const Text(
-                  "To get started now", 
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.grey,
-                    fontWeight: FontWeight.bold
-                  ),
-                ),
-
-                const SizedBox(
-                  height: 16
-                ),
-                    
-
-                authenticationController.imageFile == null ?
-                const CircleAvatar(
-                  radius: 80,
-                  backgroundImage: AssetImage(
-                    "images/avatar.png"
-                  ),
-                  backgroundColor: Colors.black,
-                ) : 
-
-                //authenticationController.imageFile != null ?
-                Container(
-                  width: 180,
-                  height: 180,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.grey,
-                    image: DecorationImage(
-                      fit: BoxFit.fitHeight,
-                      image: FileImage(
-                        File(
-                          authenticationController.imageFile!.path,
-                        ),
-                      ),
-                    ),
-                  ),
-                ), 
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    IconButton(
-                      onPressed: () async
-                      {
-                        await authenticationController.pickImageFileFromGallery();
-
-                        setState(() {
-                          authenticationController.imageFile;
-                        });
-                      },
-                      icon: Icon(Icons.camera),
-                    )
-                  ],
-                ),
-
-                const SizedBox(
+              const SizedBox(
                   height: 30
                 ),
 
@@ -176,33 +355,6 @@ class _RegistraionScreenState extends State<RegistraionScreen> {
                   lableText: "Age",
                   iconData: Icons.numbers,
                   isObscure: false,
-                ),
-
-                const SizedBox( 
-                  height: 15,
-                ),
-
-                //email
-                CustomTextFieldWidget(
-                  //Email
-                  editingController: emailTextEditingController,
-                  lableText: "Email",
-                  iconData: Icons.email_outlined,
-                  isObscure: false,
-                ),
-
-                const SizedBox( 
-                  height: 15,
-                ),
-
-                
-
-                CustomTextFieldWidget(
-                  //Password
-                  editingController: passwordTextEditingController,
-                  lableText: "Password",
-                  iconData: Icons.lock_outline,
-                  isObscure: true,
                 ),
 
                 const SizedBox( 
@@ -500,10 +652,6 @@ class _RegistraionScreenState extends State<RegistraionScreen> {
                   isObscure: false,
                 ),
 
-                const SizedBox( 
-                  height: 15,
-                ),
-
                 Container(
                   width: MediaQuery.of(context).size.width - 36,
                   height: 55,
@@ -517,16 +665,10 @@ class _RegistraionScreenState extends State<RegistraionScreen> {
                     onTap: () async
                     {
 
-                      if(authenticationController.imageFile != null)
-                      {
-
-                        if (
+                       if (
 
                           nameTextEditingController.text.trim().isNotEmpty 
-                           && passwordTextEditingController.text.trim().isNotEmpty
-                           && emailTextEditingController.text.trim().isNotEmpty 
                            && ageTextEditingController.text.trim().isNotEmpty 
-                           && passwordTextEditingController.text.trim().isNotEmpty
                            && phoneTextEditingController.text.trim().isNotEmpty 
                            && cityTextEditingController.text.trim().isNotEmpty
                            && countryTextEditingController.text.trim().isNotEmpty 
@@ -536,7 +678,6 @@ class _RegistraionScreenState extends State<RegistraionScreen> {
                            && genderTextEditingController.text.trim().isNotEmpty 
                            && drinkTextEditingController.text.trim().isNotEmpty
                            && smokeTextEditingController.text.trim().isNotEmpty 
-                           && passwordTextEditingController.text.trim().isNotEmpty
                            && hasChildrenTextEditingController.text.trim().isNotEmpty 
                            && professionTextEditingController.text.trim().isNotEmpty
                            && incomeTextEditingController.text.trim().isNotEmpty
@@ -550,22 +691,12 @@ class _RegistraionScreenState extends State<RegistraionScreen> {
 
                         )
                         {
-
-                          setState(() {
-
-                            showProgressBar = true;
-                            
-                          });
-
                           
+                          _image.length > 0 ?
+                          await updateUserDataToFirestoreDatabase(
 
-                          await authenticationController.createNewUserAccount(
-
-                              authenticationController.profileImage!,
                               nameTextEditingController.text.trim(),
                               ageTextEditingController.text.trim(),
-                              emailTextEditingController.text.trim(),
-                              passwordTextEditingController.text.trim(),
                               phoneTextEditingController.text.trim(),
                               cityTextEditingController.text.trim(),
                               countryTextEditingController.text.trim(),
@@ -578,44 +709,27 @@ class _RegistraionScreenState extends State<RegistraionScreen> {
                               professionTextEditingController.text.trim(),
                               hasChildrenTextEditingController.text.trim(),
                               incomeTextEditingController.text.trim(),
-                              hasChildrenTextEditingController.text.trim(),
                               livingSituationTextEditingController.text.trim(),
                               favouriteBreedTextEditingController.text.trim(),
                               sizeOfDogTextEditingController.text.trim(),
                               nationalityTextEditingController.text.trim(),
                               languageSpokenTextEditingController.text.trim(),
                               educationTextEditingController.text.trim(),
-                              religionextEditingController.text.trim(),
+                              religionextEditingController.text.trim()
                               
-                              );
-
-                              setState(() {
-                                showProgressBar = false;
-                                authenticationController.imageFile = null;
-                              });
-
+                              ) : null;
                         }
-
                         else
                         {
-
-                          Get.snackbar("Field is empty", "Please fill out all fields");
+                          Get.snackbar("A field is empty", "Please fill in all the text fields");
 
                         }
-
-                      }
-
-                      else
-                      {
-                        Get.snackbar("Image File Missing", "Please pick an image");
-
-                      }
                       
 
                     },
                     child: const Center(
                       child: Text(
-                        "Create account",
+                        "Update account",
                         style: TextStyle(
                           fontSize: 20,
                           color: Colors.black,
@@ -630,56 +744,60 @@ class _RegistraionScreenState extends State<RegistraionScreen> {
                   height: 15,
                 ),
 
-
-                //Button to Register a new account 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-
-                    Text(
-                    
-                      "Already have an account? ",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.grey,
-                      ),
-                    ),
-
-                    InkWell(
-                      onTap: ()
-                      {
-                        Get.to(LoginScreen());
-                      },
-                      child: const Text(
-                        "Login here",
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-                const SizedBox( 
-                  height: 15,
-                ),
-
-
-                //Loading bar
-                showProgressBar == true ? CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.pink),
-                ) : Container(),
-
-                const SizedBox( 
-                  height: 15,
-                ),
-
-              ],
-            ),
+            ],
           ),
-        )
-      )
+        ),
+      ) 
+      : Stack(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(4),
+            child: GridView.builder(
+              itemCount: _image.length + 1,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+              ),
+              itemBuilder: (context, index)
+              {
+                return index == 0 
+                ? Container(
+                  color: Colors.white30,
+                  child: Center(
+                    child: IconButton(
+                      onPressed: ()
+                      {
+                        if(_image.length < 6)
+                        {
+                          !uploading ? chooseImage() : null;
+                        }
+                        else
+                        {
+                          setState(() {
+                            uploading == true;
+                          });
+                        }
+                        
+                      },
+                      icon: const Icon(Icons.add),
+                    ),
+                  ),
+                ) 
+                : Container(
+                  margin: const EdgeInsets.all(3),
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: FileImage(
+                        _image[index - 1],
+                      ),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                );
+              },
+            ),
+          )
+        ],
+      ),
     );
   }
 }

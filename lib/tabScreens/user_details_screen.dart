@@ -3,6 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_slider/carousel.dart';
+import 'package:get/get.dart';
+import 'package:pawfect_match/global.dart';
+import 'package:pawfect_match/userSettingsScreen/account_settings_screen.dart';
 
 class UserDetailScreen extends StatefulWidget {
   String? userID;
@@ -124,18 +127,33 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
           )
         ),
         centerTitle: true,
-        automaticallyImplyLeading: false,
+        automaticallyImplyLeading: widget.userID == currentUserID ? false : true,
         actions: [
-          IconButton(
-            onPressed: ()
-            {
-              FirebaseAuth.instance.signOut();
-            },
-            icon: const Icon(
-              Icons.logout,
-              size: 30,
-            )
-          )
+          widget.userID == currentUserID ?
+          Row(
+            children: [
+              IconButton(
+                onPressed: ()
+                {
+                  Get.to(AccountSettingsScreen());
+                },
+                icon: const Icon(
+                  Icons.settings,
+                  size: 30,
+                )
+              ),
+              IconButton(
+                onPressed: ()
+                {
+                  FirebaseAuth.instance.signOut();
+                },
+                icon: const Icon(
+                  Icons.logout,
+                  size: 30,
+                )
+              ),
+            ],
+          ) : Container(),
         ],
       ),
       body: SingleChildScrollView(
