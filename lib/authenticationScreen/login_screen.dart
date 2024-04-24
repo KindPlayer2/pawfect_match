@@ -35,14 +35,15 @@ class _LoginScreenState extends State<LoginScreen> {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            Colors.red, // Start color
-            Colors.pink, // Middle color
-            Colors.purple, // End color
+            Color.fromARGB(255, 209, 171, 125), // Top Color
+            Color.fromARGB(255, 189, 147, 104), // Middle Color
+            Color.fromARGB(255, 96, 68, 47), // Bottom Color
           ],
           stops: [
+            // Adjust these stops for the distribution of colors
             0.1,
             0.5,
-            1.2
+            0.9,
           ], // Adjust these stops for the distribution of colors
         ),
       ),
@@ -63,7 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
-                  color: Color.fromARGB(255, 255, 255, 255),
+                  color: Color.fromARGB(255, 0, 0, 0),
                 ),
               ),
               // Add some space below the title
@@ -73,7 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 "Login now and find your Fur-ever mate",
                 style: TextStyle(
                   fontSize: 18,
-                  color: Color.fromARGB(255, 255, 255, 255),
+                  color: Color.fromARGB(255, 0, 0, 0),
                 ),
               ),
               // Add some space below the prompt
@@ -107,21 +108,21 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 child: InkWell(
-                  onTap: () async
-                  {
-                    if(emailTextEditingController.text.trim().isNotEmpty && passwordTextEditingController.text.trim().isNotEmpty)
-                    {
+                  onTap: () async {
+                    if (emailTextEditingController.text.trim().isNotEmpty &&
+                        passwordTextEditingController.text.trim().isNotEmpty) {
                       setState(() {
                         showProgressBar = true;
                       });
-                      await controllerAuth.loginUser(emailTextEditingController.text.trim(), passwordTextEditingController.text.trim());
+                      await controllerAuth.loginUser(
+                          emailTextEditingController.text.trim(),
+                          passwordTextEditingController.text.trim());
                       setState(() {
                         showProgressBar = false;
                       });
-                    }
-                    else
-                    {
-                      Get.snackbar("Email or password is missing", "Please fill all fields");
+                    } else {
+                      Get.snackbar("Email or password is missing",
+                          "Please fill all fields");
                     }
                   },
                   child: const Center(
