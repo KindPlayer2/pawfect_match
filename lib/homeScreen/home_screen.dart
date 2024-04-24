@@ -13,81 +13,74 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> 
-{
+class _HomeScreenState extends State<HomeScreen> {
   int screenIndex = 0;
 
-  List tabScreensList = 
-  [
+  List tabScreensList = [
     SwippingScreen(),
     ViewSentViewReceivedScreen(),
     FavouriteSentFavououriteReceivedScreen(),
     LikeSentLikeReceivedScreen(),
-    UserDetailScreen(userID: FirebaseAuth.instance.currentUser!.uid,),
+    UserDetailScreen(
+      userID: FirebaseAuth.instance.currentUser!.uid,
+    ),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
-         onTap: (indexNumber)
-         {
-            setState(() {
-              screenIndex = indexNumber;
-            });
-         },
-         type: BottomNavigationBarType.fixed,
-         backgroundColor: Colors.black,
-         selectedItemColor: Colors.white,
-         unselectedItemColor: const Color.fromRGBO(255, 255, 255, 0.122),
-         currentIndex: screenIndex,
-         items: 
-         [
+        onTap: (indexNumber) {
+          setState(() {
+            screenIndex = indexNumber;
+          });
+        },
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: Colors.black,
+        selectedItemColor: Colors.white,
+        unselectedItemColor: const Color.fromRGBO(255, 255, 255, 0.122),
+        currentIndex: screenIndex,
+        items: [
           //Swiping screen
           BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home,
-              size: 30,
-            ),
-            label: ""
-          ),
+              icon: Icon(
+                Icons.home,
+                size: 30,
+              ),
+              label: ""),
 
-          //sent 
+          //sent
           BottomNavigationBarItem(
-            icon: Icon(
-              Icons.remove_red_eye,
-              size: 30,
-            ),
-            label: ""
-          ),
-          
+              icon: Icon(
+                Icons.remove_red_eye,
+                size: 30,
+              ),
+              label: ""),
+
           //favourites
           BottomNavigationBarItem(
-            icon: Icon(
-              Icons.star,
-              size: 30,
-            ),
-            label: ""
-          ),
+              icon: Icon(
+                Icons.star,
+                size: 30,
+              ),
+              label: ""),
 
           //likes
           BottomNavigationBarItem(
-            icon: Icon(
-              Icons.favorite,
-              size: 30,
-            ),
-            label: ""
-          ),
+              icon: Icon(
+                Icons.favorite,
+                size: 30,
+              ),
+              label: ""),
 
           //user details
           BottomNavigationBarItem(
-            icon: Icon(
-              Icons.person,
-              size: 30,
-            ),
-            label: ""
-          ),
-         ],
+              icon: Icon(
+                Icons.person,
+                size: 30,
+              ),
+              label: ""),
+        ],
       ),
       body: tabScreensList[screenIndex],
     );
